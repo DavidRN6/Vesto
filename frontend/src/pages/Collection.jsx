@@ -130,7 +130,7 @@ function Collection() {
   }, [sortType]);
 
   return (
-    <section className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
+    <section className="flex flex-col sm:flex-row gap-1 sm:gap-10  pt-4 sm:pt-7 lg:pt-10 border-t">
       {/*===================
         7. Filter Options
       ======================*/}
