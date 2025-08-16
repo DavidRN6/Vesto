@@ -59,7 +59,7 @@ function Hero() {
   };
 
   return (
-    <section className="w-full relative overflow-hidden bg-white -z-10">
+    <section className="w-full relative overflow-hidden bg-white">
       <div className="w-full max-w-[1350px] mx-auto">
         <Slider {...settings} className="w-full  ml-0 lg:ml-20">
           {imageList.map((data) => (
