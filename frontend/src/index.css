@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "outfit", serif;
+}
+#logo {
+  font-family: "Oleo Script", serif;
+}
+#hero,
+#sign-up {
+  font-family: "prata", serif;
+}
+a.active hr {
+  display: block;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  a.active {
+    background: #000;
+    color: white;
+  }
+}
+
+@media (max-width: 700px) {
+  #contact form {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin: auto;
+  }
+  #contact form div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (max-width: 1024px) {
+  #animation {
+    display: none;
+  }
+}
