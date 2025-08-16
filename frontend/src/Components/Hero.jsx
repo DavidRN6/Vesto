@@ -64,7 +64,7 @@ function Hero() {
         <Slider {...settings} className="w-full  ml-0 lg:ml-20">
           {imageList.map((data) => (
             <div key={data.id} className="w-full">
-              <div className="w-full grid grid-cols-1 sm:grid-cols-2 items-center gap-6 px-4 py-10">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 items-center gap-6 px-4 py-5 lg:py-10">
                 {/*=================
                   4. text content
                 ====================*/}

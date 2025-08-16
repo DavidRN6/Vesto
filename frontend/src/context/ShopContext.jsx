@@ -9,7 +9,6 @@
   5. Get Cart Total Amount
   6. Get Products Data
   7. Get User Cart
-  8. UseEffects
 */
 
 //==============
@@ -31,12 +30,12 @@ const ShopContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(true); // 🆕 حالة تحميل
   const navigate = useNavigate();
 
   //=================
   // 2. Add To Cart
   //=================
+  // هنا بنضيف المنتج الى السلة و بنعمل check على ال size و ال color
   const addToCart = async (itemId, size, color) => {
     if (!size) {
       toast.error("Select Product Size");
@@ -81,6 +80,7 @@ const ShopContextProvider = ({ children }) => {
   //====================
   // 3. Get Cart Count
   //====================
+  // هنا بنجيب عدد المنتجات اللى موجودة فى السلة
   const getCartCount = () => {
     let totalCount = 0;
 
@@ -100,6 +100,7 @@ const ShopContextProvider = ({ children }) => {
   //==========================
   // 4. Update Cart Quantity
   //==========================
+  // هنا بنعمل تحديث للكمية بتاعت المنتج اللى موجودة فى السلة
   const updateQuantity = async (itemId, size, color, quantity) => {
     let cartData = structuredClone(cartItems);
 
@@ -131,6 +132,7 @@ const ShopContextProvider = ({ children }) => {
   //===========================
   // 5. Get Cart Total Amount
   //===========================
+  // هنا بنحسب المبلغ الكلى للمنتجات اللى موجودة فى السلة
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const itemId in cartItems) {
@@ -138,7 +140,7 @@ const ShopContextProvider = ({ children }) => {
 
       if (!itemInfo) {
         continue;
-      }
+      } // تأكد أن العنصر موجود
 
       for (const size in cartItems[itemId]) {
         for (const color in cartItems[itemId][size]) {
@@ -158,20 +160,18 @@ const ShopContextProvider = ({ children }) => {
   //======================
   // 6. Get Products Data
   //======================
+  // هنا بنجيب بيانات المنتجات من السيرفر و بنخزنها فى حالة
   const getProductsData = async () => {
     try {
       const response = await axios.get(backendUrl + "/api/product/list");
       if (response.data.success) {
         setProducts(response.data.products);
-        setLoading(false); // 🆕 إيقاف التحميل
       } else {
         toast.error(response.data.message);
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-      setLoading(false);
     }
   };
 
@@ -194,9 +194,9 @@ const ShopContextProvider = ({ children }) => {
     }
   };
 
-  //=====================
-  // 8. UseEffects
-  //=====================
+  //====================================================================================
+  // هنا بنعمل useEffect عشان نجيب بيانات المنتجات من السيرفر اول ما الصفحة تفتح
+  //====================================================================================
   useEffect(() => {
     getProductsData();
   }, []);
@@ -226,7 +226,6 @@ const ShopContextProvider = ({ children }) => {
     backendUrl,
     setToken,
     token,
-    loading, // 🆕 نمرر حالة التحميل للفرونت
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

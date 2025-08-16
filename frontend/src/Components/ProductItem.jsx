@@ -21,7 +21,10 @@ function ProductItem({ id, image, name, price }) {
   // If so, use the first element as the main image
   // Otherwise, set mainImage to an empty string
   //==========================================================
-  const mainImage = Array.isArray(image) && image.length > 0 ? image[0] : "";
+  const mainImage =
+    Array.isArray(image) && image.length > 0
+      ? image[0].replace("/upload/", "/upload/q_auto,f_auto/")
+      : "";
 
   return (
     <Link className="text-gray-700 cursor-pointer " to={`/product/${id}`}>
@@ -30,6 +33,7 @@ function ProductItem({ id, image, name, price }) {
           className="hover:scale-105 transition ease-in-out"
           src={mainImage}
           alt="product image"
+          loading="lazy"
         />
       </div>
       <p className="pt-3 pb-1 text-sm">{name}</p>
