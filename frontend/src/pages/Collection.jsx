@@ -36,7 +36,6 @@ function Collection() {
   const categories = [
     "Blazers",
     "Dresses",
-    "Shirts",
     "Tops",
     "T-Shirts",
     "Blouses",

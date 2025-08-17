@@ -37,20 +37,64 @@ function Add({ token }) {
   //==========================================================================
   // 3. available Size => بزود المقاسات من هنا اللى بيختارة الادمن للمنتج
   //==========================================================================
-  const availableSizes = ["S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36"];
+  const availableSizes = [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "42",
+    "44",
+    "46",
+    "48",
+    "50",
+    "52",
+    "54",
+    "One Size",
+  ];
 
   //==========================================================================
   // 3. available Colors => بزود الكالار من هنا اللى بيختارة الادمن للمنتج
   //==========================================================================
   const availableColors = [
-    { label: "Black", value: "Black" },
-    { label: "White", value: "White" },
-    { label: "Mint Green", value: "mintGreen" },
-    { label: "Baby Blue", value: "babyBlue" },
-    { label: "Gray", value: "Gray" },
-    { label: "Beige", value: "Beige" },
-    { label: "Pink", value: "Pink" },
-    { label: "Red", value: "Red" },
+    { label: "اسود", value: "اسود" },
+    { label: "ابيض", value: "ابيض" },
+    { label: "احمر", value: "احمر" },
+    { label: "اصفر", value: "اصفر" },
+    { label: "اخضر", value: "اخضر" },
+    { label: "ازرق", value: "ازرق" },
+    { label: "لبنى", value: "لبنى" },
+    { label: "بينك", value: "بينك" },
+    { label: "موف", value: "موف" },
+    { label: "نبيتى", value: "نبيتى" },
+    { label: "زيتى", value: "زيتى" },
+    { label: "مينت", value: "مينت" },
+    { label: "اورانج", value: "اورانج" },
+    { label: "بيج", value: "بيج" },
+    { label: "بترولى", value: "بترولى" },
+    { label: "عنابى", value: "عنابى" },
+    { label: "كاشمير", value: "كاشمير" },
+    { label: "كاروهات", value: "كاروهات" },
+    { label: "مشجر", value: "مشجر" },
+    { label: "بنى", value: "بنى" },
+    { label: "محجر", value: "محجر" },
+    { label: "رمادى", value: "رمادى" },
+    { label: "كافيه", value: "كافيه" },
+    { label: "هافان", value: "هافان" },
+    { label: "فوشيا", value: "فوشيا" },
   ];
 
   /*======================== 
@@ -121,7 +165,7 @@ function Add({ token }) {
         6. Upload Image
       ===================*/}
       <div>
-        <p className="mb-2">Upload Image</p>
+        <p className="mb-2">الصور</p>
 
         <div className="flex gap-2">
           <label htmlFor="image1">
@@ -186,23 +230,21 @@ function Add({ token }) {
         7. Inputs Field
       ===================*/}
       <div className="w-full">
-        <p className="mb-2">Product name</p>
+        <p className="mb-2">اسم المنتج</p>
         <input
           onChange={(e) => setName(e.target.value)}
           value={name}
           type="text"
-          placeholder="Type here"
           required
           className="w-full max-w-[500px] px-3 py-2"
         />
       </div>
 
       <div className="w-full">
-        <p className="mb-2">Product description</p>
+        <p className="mb-2">وصف المنتج</p>
         <textarea
           onChange={(e) => setDescription(e.target.value)}
           value={description}
-          placeholder="Write content here"
           required
           className="w-full max-w-[500px] px-3 py-2"
         />
@@ -213,14 +255,13 @@ function Add({ token }) {
       ===========================*/}
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
         <div>
-          <p className="mb-2">Product category</p>
+          <p className="mb-2">نوع المنتج</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3 py-2"
           >
             <option value="Blazers">Blazers</option>
             <option value="Dresses">Dresses</option>
-            <option value="Shirts">Shirts</option>
             <option value="Tops">Tops</option>
             <option value="T-Shirts">T-Shirts</option>
             <option value="Blouses">Blouses</option>
@@ -233,7 +274,7 @@ function Add({ token }) {
         </div>
 
         <div>
-          <p className="mb-2">sub category</p>
+          <p className="mb-2">صنف المنتج</p>
           <select
             onChange={(e) => setSubCategory(e.target.value)}
             className="w-full px-3 py-2"
@@ -244,7 +285,7 @@ function Add({ token }) {
         </div>
 
         <div>
-          <p className="mb-2">Product Price</p>
+          <p className="mb-2">السعر</p>
           <input
             onChange={(e) => setPrice(e.target.value)}
             value={price}
@@ -259,7 +300,7 @@ function Add({ token }) {
         9. Product Size
       ===================*/}
       <div>
-        <p className="mb-2">Product Sizes</p>
+        <p className="mb-2">المقاسات</p>
         <div className="flex flex-wrap gap-3">
           {availableSizes.map((size) => (
             <div
@@ -289,7 +330,7 @@ function Add({ token }) {
         10. Product Color
       ====================*/}
       <div>
-        <p className="mb-2">Product Color</p>
+        <p className="mb-2">الالوان</p>
         <div className="flex flex-wrap gap-3">
           {availableColors.map((item) => (
             <div
