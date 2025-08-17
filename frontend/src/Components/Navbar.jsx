@@ -66,26 +66,26 @@ function Navbar() {
   };
 
   return (
-    <div className="flex justify-between items-center py-3 sm:5 font-medium text:logo">
+    <div className="flex justify-between items-center py-3 sm:5 font-medium">
       {/*=================
           4. Burger menu 
         ===================*/}
       <button
-        className="relative w-7 h-5 focus:outline-none z-50 block sm:hidden"
+        className="relative w-7 h-[18px] focus:outline-none z-50 block sm:hidden"
         onClick={toggleMenu}
       >
         <span
-          className={`block absolute left-0 w-full h-[3px] bg-black transition-all duration-500 rounded-sm ${
+          className={`block absolute left-0 w-full h-[2px] bg-black transition-all duration-500 rounded-sm ${
             visible ? "rotate-45 top-1/2 -translate-y-1/2" : "top-0"
           }`}
         ></span>
         <span
-          className={`block absolute left-0 w-full h-[3px] bg-black transition-all duration-500 rounded-sm ${
+          className={`block absolute left-0 w-full h-[2px] bg-black transition-all duration-500 rounded-sm ${
             visible ? "opacity-0" : "top-1/2 -translate-y-1/2"
           }`}
         ></span>
         <span
-          className={`block absolute left-0 w-full h-[3px] bg-black transition-all duration-500 rounded-sm ${
+          className={`block absolute left-0 w-full h-[2px] bg-black transition-all duration-500 rounded-sm ${
             visible ? "-rotate-45 top-1/2 -translate-y-1/2" : "bottom-0"
           }`}
         ></span>
