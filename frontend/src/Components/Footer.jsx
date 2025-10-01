@@ -79,9 +79,6 @@ function Footer() {
               >
                 <FaFacebookSquare className="text-3xl hover:scale-105 transition-all duration-300 hover:text-gray-300" />
               </a>
-              <a href="" target="_blank">
-                <FaInstagram className="text-3xl hover:scale-105 duration-300 hover:text-gray-300" />
-              </a>
             </div>
             <div className="w-full md:w-2/3 text-gray-200 text-base">
               <h2 className="flex items-center gap-2 mb-2 mt-5">

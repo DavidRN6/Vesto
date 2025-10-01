@@ -37,7 +37,10 @@ function Contact() {
         </p>
       </h1>
 
-      <div id="form" className="flex flex-col lg:flex-row items-center justify-around mt-10 gap-10">
+      <div
+        id="form"
+        className="flex flex-col lg:flex-row items-center justify-around mt-10 gap-10"
+      >
         {/*===========
           3. Form
         ==============*/}
@@ -57,7 +60,11 @@ function Contact() {
               name="email"
               id="email"
             />
-            <ValidationError prefix="Email" field="email" errors={state.errors} />
+            <ValidationError
+              prefix="Email"
+              field="email"
+              errors={state.errors}
+            />
           </div>
 
           {/*==================
@@ -73,7 +80,11 @@ function Contact() {
               name="message"
               id="message"
             ></textarea>
-            <ValidationError prefix="Message" field="message" errors={state.errors} />
+            <ValidationError
+              prefix="Message"
+              field="message"
+              errors={state.errors}
+            />
           </div>
 
           {/*==================
@@ -82,7 +93,7 @@ function Contact() {
           <button
             type="submit"
             disabled={state.submitting}
-            className="bg-gray-700 w-full sm:w-28 rounded-[6px] mt-6 py-3 text-white hover:bg-gray-800 transition duration-300"
+            className="bg-black w-full sm:w-28 rounded-[6px] mt-6 py-3 text-white hover:bg-gray-900 transition duration-200"
           >
             {state.submitting ? "Sending..." : "Submit"}
           </button>
@@ -106,7 +117,10 @@ function Contact() {
           8. animation
         ==================*/}
         <div className="w-full max-w-md hidden lg:block">
-          <Lottie className="h-[300px] sm:h-[375px]" animationData={contactUs} />
+          <Lottie
+            className="h-[300px] sm:h-[375px]"
+            animationData={contactUs}
+          />
         </div>
       </div>
     </section>
