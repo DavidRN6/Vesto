@@ -3,12 +3,13 @@
 =========================
 
   1. Imports
-  2. Add To Cart
-  3. Get Cart Count
-  4. Update Cart Quantity
-  5. Get Cart Total Amount
-  6. Get Products Data
+  2. Fetch Products with TanStack Query
+  3. Add To Cart
+  4. Get Cart Count
+  5. Update Cart Quantity
+  6. Get Cart Total Amount
   7. Get User Cart
+  8. Token & Initial Load
 */
 
 //==============
@@ -18,6 +19,7 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const ShopContext = createContext();
 
@@ -28,14 +30,31 @@ const ShopContextProvider = ({ children }) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
-  const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
+  //========================================
+  // 2. Fetch Products with TanStack Query
+  //========================================
+  const {
+    data: products = [],
+    isLoading: productsLoading,
+    isError: productsError,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const response = await axios.get(`${backendUrl}/api/product/list`);
+      return response.data.products;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
+  });
+
   //=================
-  // 2. Add To Cart
+  // 3. Add To Cart
   //=================
-  // هنا بنضيف المنتج الى السلة و بنعمل check على ال size و ال color
   const addToCart = async (itemId, size, color) => {
     if (!size) {
       toast.error("Select Product Size");
@@ -47,13 +66,8 @@ const ShopContextProvider = ({ children }) => {
     }
 
     let cartData = structuredClone(cartItems);
-
-    if (!cartData[itemId]) {
-      cartData[itemId] = {};
-    }
-    if (!cartData[itemId][size]) {
-      cartData[itemId][size] = {};
-    }
+    if (!cartData[itemId]) cartData[itemId] = {};
+    if (!cartData[itemId][size]) cartData[itemId][size] = {};
     if (cartData[itemId][size][color]) {
       cartData[itemId][size][color] += 1;
     } else {
@@ -77,42 +91,29 @@ const ShopContextProvider = ({ children }) => {
     toast.success("Product Added to Cart");
   };
 
-  //====================
-  // 3. Get Cart Count
-  //====================
-  // هنا بنجيب عدد المنتجات اللى موجودة فى السلة
+  //=====================
+  // 4. Get Cart Count
+  //=====================
   const getCartCount = () => {
     let totalCount = 0;
-
     for (const itemId in cartItems) {
       for (const size in cartItems[itemId]) {
         for (const color in cartItems[itemId][size]) {
-          if (cartItems[itemId][size][color] > 0) {
-            totalCount += cartItems[itemId][size][color];
-          }
+          totalCount += cartItems[itemId][size][color];
         }
       }
     }
-
     return totalCount;
   };
 
-  //==========================
-  // 4. Update Cart Quantity
-  //==========================
-  // هنا بنعمل تحديث للكمية بتاعت المنتج اللى موجودة فى السلة
+  //===========================
+  // 5. Update Cart Quantity
+  //===========================
   const updateQuantity = async (itemId, size, color, quantity) => {
     let cartData = structuredClone(cartItems);
-
-    if (!cartData[itemId]) {
-      cartData[itemId] = {};
-    }
-    if (!cartData[itemId][size]) {
-      cartData[itemId][size] = {};
-    }
-
+    if (!cartData[itemId]) cartData[itemId] = {};
+    if (!cartData[itemId][size]) cartData[itemId][size] = {};
     cartData[itemId][size][color] = quantity;
-
     setCartItems(cartData);
 
     if (token) {
@@ -129,55 +130,26 @@ const ShopContextProvider = ({ children }) => {
     }
   };
 
-  //===========================
-  // 5. Get Cart Total Amount
-  //===========================
-  // هنا بنحسب المبلغ الكلى للمنتجات اللى موجودة فى السلة
+  //============================
+  // 6. Get Cart Total Amount
+  //============================
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const itemId in cartItems) {
-      let itemInfo = products.find((product) => product._id === itemId);
-
-      if (!itemInfo) {
-        continue;
-      } // تأكد أن العنصر موجود
-
+      const itemInfo = products.find((product) => product._id === itemId);
+      if (!itemInfo) continue;
       for (const size in cartItems[itemId]) {
         for (const color in cartItems[itemId][size]) {
-          try {
-            if (cartItems[itemId][size][color] > 0) {
-              totalAmount += cartItems[itemId][size][color] * itemInfo.price;
-            }
-          } catch (error) {
-            console.error("Error calculating total amount:", error);
-          }
+          totalAmount += cartItems[itemId][size][color] * itemInfo.price;
         }
       }
     }
     return totalAmount;
   };
 
-  //======================
-  // 6. Get Products Data
-  //======================
-  // هنا بنجيب بيانات المنتجات من السيرفر و بنخزنها فى حالة
-  const getProductsData = async () => {
-    try {
-      const response = await axios.get(backendUrl + "/api/product/list");
-      if (response.data.success) {
-        setProducts(response.data.products);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
-  };
-
-  //=====================
+  //====================
   // 7. Get User Cart
-  //=====================
+  //====================
   const getUserCart = async (token) => {
     try {
       const response = await axios.post(
@@ -185,22 +157,16 @@ const ShopContextProvider = ({ children }) => {
         {},
         { headers: { token } }
       );
-      if (response.data.success) {
-        setCartItems(response.data.cartData);
-      }
+      if (response.data.success) setCartItems(response.data.cartData);
     } catch (error) {
       console.log(error);
       toast.error(error.message);
     }
   };
 
-  //====================================================================================
-  // هنا بنعمل useEffect عشان نجيب بيانات المنتجات من السيرفر اول ما الصفحة تفتح
-  //====================================================================================
-  useEffect(() => {
-    getProductsData();
-  }, []);
-
+  //===========================
+  // 8. Token & Initial Load
+  //===========================
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
@@ -210,6 +176,8 @@ const ShopContextProvider = ({ children }) => {
 
   const value = {
     products,
+    productsLoading,
+    productsError,
     currency,
     delivery_fee,
     search,
@@ -224,8 +192,8 @@ const ShopContextProvider = ({ children }) => {
     getCartAmount,
     navigate,
     backendUrl,
-    setToken,
     token,
+    setToken,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

@@ -26,7 +26,8 @@ import Title from "../Components/Title";
 import ProductItem from "../Components/ProductItem";
 
 function Collection() {
-  const { products, search, showSearch } = useContext(ShopContext);
+  const { products, productsLoading, productsError, search, showSearch } =
+    useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -127,6 +128,15 @@ function Collection() {
   useEffect(() => {
     sortProduct();
   }, [sortType]);
+
+  if (productsLoading)
+    return <p className="text-center py-10">Loading products...</p>;
+  if (productsError)
+    return (
+      <p className="text-center py-10 text-red-500">Error loading products.</p>
+    );
+  if (!products || products.length === 0)
+    return <p className="text-center py-10">No products found.</p>;
 
   return (
     <section className="flex flex-col sm:flex-row gap-1 sm:gap-10  pt-4 sm:pt-7 lg:pt-10 border-t">

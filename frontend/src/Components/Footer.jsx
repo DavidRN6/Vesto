@@ -13,13 +13,12 @@
 //==============
 import { Link } from "react-router-dom";
 import { HiOutlineMail } from "react-icons/hi";
-import { FaInstagram } from "react-icons/fa";
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 
 function Footer() {
   return (
-    <div className="bg-gray-800">
+    <div className="bg-gray-950">
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
         <div className="flex flex-col sm:grid grid-cols-[2fr_1fr_1fr] gap-14 py-12 text-sm">
           {/*==================

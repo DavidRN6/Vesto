@@ -71,7 +71,7 @@ function Navbar() {
           4. Burger menu 
         ===================*/}
       <button
-        className="relative w-7 h-[18px] focus:outline-none z-50 block sm:hidden"
+        className="relative w-6 h-[18px] focus:outline-none z-50 block sm:hidden"
         onClick={toggleMenu}
       >
         <span

@@ -4,12 +4,12 @@
 
   1. Imports
   2. Fetch Product Data
-  3. Product Image
-  4. Product Info
-  5. Select Size
-  6. Size Chart Component
+  3. Handle Loading and Errors
+  4. Product Images
+  5. Product Info
+  6. Select Size
   7. Select Color
-  8. Display related products
+  8. Related Products
 */
 
 //==============
@@ -22,40 +22,43 @@ import RelatedProducts from "../Components/RelatedProducts";
 
 function Product() {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
-  const [productData, setProductData] = useState(false);
+  const { products, productsLoading, productsError, currency, addToCart } =
+    useContext(ShopContext);
+  const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
 
-  //=========================
+  //=======================
   // 2. Fetch Product Data
-  //=========================
-  const fetchProductData = async () => {
-    if (!Array.isArray(products)) return;
-
-    const foundProduct = products.find((item) => item._id === productId);
-
-    if (foundProduct) {
-      setProductData(foundProduct);
-      setImage(
-        Array.isArray(foundProduct.images) ? foundProduct.images[0] : ""
-      );
-    }
-  };
-
+  //=======================
   useEffect(() => {
-    if (productId && products?.length) {
-      fetchProductData();
+    if (productId && Array.isArray(products)) {
+      const foundProduct = products.find((item) => item._id === productId);
+      if (foundProduct) {
+        setProductData(foundProduct);
+        setImage(
+          Array.isArray(foundProduct.images) ? foundProduct.images[0] : ""
+        );
+      }
     }
   }, [productId, products]);
 
-  return productData ? (
+  //================================
+  // 3. Handle Loading and Errors
+  //================================
+  if (productsLoading) return <div>Loading product...</div>;
+  if (productsError) return <div>Error loading product.</div>;
+  if (!Array.isArray(products)) return <div>No products available.</div>;
+  if (!productData)
+    return <div className="text-center py-10">Product not found.</div>;
+
+  return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
       <div className="flex flex-col sm:flex-row gap-12">
-        {/*==================
-        3. Product Image
-      =====================*/}
+        {/*====================
+          4. Product Images
+        ======================*/}
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
             {Array.isArray(productData.images) &&
@@ -74,9 +77,9 @@ function Product() {
           </div>
         </div>
 
-        {/*=================
-        4. Product Info
-      ====================*/}
+        {/*==================
+          5. Product Info
+        ====================*/}
         <div className="flex-1">
           <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
           <p className="mt-5 text-2xl font-medium">
@@ -95,9 +98,9 @@ function Product() {
             {productData.description}
           </p>
 
-          {/*================
-          5. Select Size
-        ===================*/}
+          {/*==================
+            6. Select Size
+          ===================*/}
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex flex-wrap gap-2">
@@ -116,9 +119,9 @@ function Product() {
             </div>
           </div>
 
-          {/*================
-          7. Select Color
-        ===================*/}
+          {/*==================
+            7. Select Color
+          ===================*/}
           <div className="flex flex-col gap-4 my-8">
             <p>Select Color</p>
             <div className="flex flex-wrap gap-2">
@@ -151,16 +154,14 @@ function Product() {
         </div>
       </div>
 
-      {/*=============================
-      8. Display related products
-    ================================*/}
+      {/*====================
+        8. Related Products
+      =====================*/}
       <RelatedProducts
         category={productData.category}
         subCategory={productData.subCategory}
       />
     </div>
-  ) : (
-    <div className="opacity-0"></div>
   );
 }
 
