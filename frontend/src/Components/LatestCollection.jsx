@@ -10,21 +10,24 @@
 //==============
 // 1. Imports
 //==============
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 function LatestCollection() {
-  const { products } = useContext(ShopContext);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const { products, productsLoading, productsError } = useContext(ShopContext);
 
-  //=======================================================
-  // 2. Filter the products to get the lastest collection
-  //=======================================================
-  useEffect(() => {
-    setLatestProducts(products.slice(0, 10));
-  }, [products]);
+  const latestProducts = Array.isArray(products) ? products.slice(0, 10) : [];
+
+  if (productsLoading)
+    return <p className="text-center py-10">Loading products...</p>;
+  if (productsError)
+    return (
+      <p className="text-center py-10 text-red-500">Error loading products.</p>
+    );
+  if (!products || products.length === 0)
+    return <p className="text-center py-10">No products found.</p>;
 
   return (
     <div className="my-10">

@@ -9,22 +9,29 @@
 //==============
 // 1. Imports
 //==============
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 
 function BestSeller() {
-  const { products } = useContext(ShopContext);
-  const [bestSeller, setBestSeller] = useState([]);
+  const { products, productsLoading, productsError } = useContext(ShopContext);
 
   //=================================================
   // 2. Filter the products to get the best sellers
   //=================================================
-  useEffect(() => {
-    const bestProduct = products.filter((item) => item.bestseller);
-    setBestSeller(bestProduct.slice(0, 5));
-  }, [products]);
+  const bestSeller = Array.isArray(products)
+    ? products.filter((item) => item.bestseller).slice(0, 5)
+    : [];
+
+  if (productsLoading)
+    return <p className="text-center py-10">Loading products...</p>;
+  if (productsError)
+    return (
+      <p className="text-center py-10 text-red-500">Error loading products.</p>
+    );
+  if (!products || products.length === 0)
+    return <p className="text-center py-10">No products found.</p>;
 
   return (
     <div className="my-10">
