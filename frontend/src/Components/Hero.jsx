@@ -24,20 +24,20 @@ function Hero() {
     {
       id: 1,
       img: assets.home_1,
-      title: "Upto 50% off on all Jeans",
-      desc: "Discover our latest jeans collection crafted for comfort and style. Get premium quality at half the price. Limited-time offer!",
+      title: "Welcome to Vesto",
+      desc: "Your destination for modern fashion. Discover carefully curated pieces made to elevate your everyday style.",
     },
     {
       id: 2,
       img: assets.home_2,
-      title: "30% off on all Women's Wear",
-      desc: "Stay trendy with our new women's fashion line. Dresses, tops, and sets designed for every occasion—now with 30% off.",
+      title: "Your Style, Your Identity",
+      desc: "Find pieces that speak for you. A wide range of designs crafted to match every personality and occasion.",
     },
     {
       id: 3,
       img: assets.home_3,
-      title: "70% off on all Products sale",
-      desc: "Don't miss our mega sale! Shop now and enjoy up to 70% off on the entire collection. Style that fits every budget.",
+      title: "Where Fashion Meets Comfort",
+      desc: "Experience clothing that feels as good as it looks. Premium quality and effortless style in one place.",
     },
   ];
 
