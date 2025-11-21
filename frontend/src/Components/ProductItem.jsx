@@ -28,9 +28,9 @@ function ProductItem({ id, image, name, price }) {
 
   return (
     <Link className="text-gray-700 cursor-pointer " to={`/product/${id}`}>
-      <div className="overflow-hidden h-[450px]">
+      <div className="overflow-hidden">
         <img
-          className="w-full h-full object-cover hover:scale-105 transition ease-in-out"
+          className="hover:scale-105 transition ease-in-out"
           src={mainImage}
           alt="product image"
           loading="lazy"
