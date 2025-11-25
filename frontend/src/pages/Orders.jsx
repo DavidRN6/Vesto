@@ -192,7 +192,7 @@ function Orders() {
                 <div className="flex items-start gap-6 text-sm">
                   <img
                     className="w-24 sm:w-[100px]"
-                    src={item.images[0]}
+                    src={item.images?.[0] || "/placeholder.png"}
                     alt="product-img"
                   />
                   <div>

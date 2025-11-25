@@ -24,6 +24,7 @@ import uploadArea from "../assets/upload_area.webp";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 function Add({ token }) {
   /*=================
@@ -112,10 +113,8 @@ function Add({ token }) {
   //======================
   // 5. APIS Product add
   //======================
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-
-    try {
+  const addProductMutation = useMutation({
+    mutationFn: async () => {
       const formData = new FormData();
 
       formData.append("name", name);
@@ -124,8 +123,8 @@ function Add({ token }) {
       formData.append("category", category);
       formData.append("subCategory", subCategory);
       formData.append("bestseller", bestseller);
-      formData.append("sizes", JSON.stringify(sizes)); // JSON.stringify => array لان سايز ده
-      formData.append("color", JSON.stringify(color)); // JSON.stringify => array لان كالار ده
+      formData.append("sizes", JSON.stringify(sizes));
+      formData.append("color", JSON.stringify(color));
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
@@ -133,13 +132,17 @@ function Add({ token }) {
       image4 && formData.append("image4", image4);
 
       const response = await axios.post(
-        backendUrl + "/api/Product/add",
+        backendUrl + "/api/product/add",
         formData,
         { headers: { token } }
       );
 
-      if (response.data.success) {
-        toast.success(response.data.message);
+      return response.data;
+    },
+
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.message);
         setName("");
         setDescription("");
         setImage1(false);
@@ -148,13 +151,67 @@ function Add({ token }) {
         setImage4(false);
         setPrice("");
       } else {
-        toast.error(response.data.message);
+        toast.error(data.message);
       }
-    } catch (error) {
+    },
+
+    onError: (error) => {
       console.log(error);
       toast.error(error.message);
-    }
+    },
+  });
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    addProductMutation.mutate();
   };
+
+  //============================
+  // Without using react-query
+  //============================
+  // const onSubmitHandler = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const formData = new FormData();
+
+  //     formData.append("name", name);
+  //     formData.append("description", description);
+  //     formData.append("price", price);
+  //     formData.append("category", category);
+  //     formData.append("subCategory", subCategory);
+  //     formData.append("bestseller", bestseller);
+  //     formData.append("sizes", JSON.stringify(sizes)); // JSON.stringify => array لان سايز ده
+  //     formData.append("color", JSON.stringify(color)); // JSON.stringify => array لان كالار ده
+
+  //     image1 && formData.append("image1", image1);
+  //     image2 && formData.append("image2", image2);
+  //     image3 && formData.append("image3", image3);
+  //     image4 && formData.append("image4", image4);
+
+  //     const response = await axios.post(
+  //       backendUrl + "/api/Product/add",
+  //       formData,
+  //       { headers: { token } }
+  //     );
+
+  //     if (response.data.success) {
+  //       toast.success(response.data.message);
+  //       setName("");
+  //       setDescription("");
+  //       setImage1(false);
+  //       setImage2(false);
+  //       setImage3(false);
+  //       setImage4(false);
+  //       setPrice("");
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message);
+  //   }
+  // };
 
   return (
     <form
@@ -375,8 +432,12 @@ function Add({ token }) {
       {/*================
         12. Add Button
       ===================*/}
-      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">
-        ADD
+      <button
+        disabled={addProductMutation.isPending}
+        type="submit"
+        className="w-28 py-3 mt-4 bg-black text-white"
+      >
+        {addProductMutation.isPending ? "Adding..." : "Add Product"}
       </button>
     </form>
   );

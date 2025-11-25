@@ -22,7 +22,7 @@ import RelatedProducts from "../Components/RelatedProducts";
 
 function Product() {
   const { productId } = useParams();
-  const { products, productsLoading, productsError, currency, addToCart } =
+  const { products, productsLoading, productsError, currency, addToCart, addToCartPending } =
     useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
@@ -142,14 +142,14 @@ function Product() {
 
           <button
             onClick={() => addToCart(productData._id, size, color)}
-            disabled={productData.stockStatus === "out of stock"}
+            disabled={productData.stockStatus === "out of stock" || addToCartPending}
             className={`px-8 py-3 text-sm text-white ${
               productData.stockStatus === "out of stock"
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-black active:bg-gray-700"
             }`}
           >
-            ADD TO CART
+            {addToCartPending ? "ADDING..." : "ADD TO CART"}
           </button>
         </div>
       </div>

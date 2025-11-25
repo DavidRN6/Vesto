@@ -19,7 +19,7 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 export const ShopContext = createContext();
 
@@ -55,40 +55,45 @@ const ShopContextProvider = ({ children }) => {
   //=================
   // 3. Add To Cart
   //=================
-  const addToCart = async (itemId, size, color) => {
-    if (!size) {
-      toast.error("Select Product Size");
-      return;
-    }
-    if (!color) {
-      toast.error("Select Product Color");
-      return;
-    }
+  const addToCartMutation = useMutation({
+    mutationFn: async ({ itemId, size, color }) => {
+      if (!size) {
+        toast.error("Select Product Size");
+        throw new Error("No size");
+      }
+      if (!color) {
+        toast.error("Select Product Color");
+        throw new Error("No color");
+      }
 
-    let cartData = structuredClone(cartItems);
-    if (!cartData[itemId]) cartData[itemId] = {};
-    if (!cartData[itemId][size]) cartData[itemId][size] = {};
-    if (cartData[itemId][size][color]) {
-      cartData[itemId][size][color] += 1;
-    } else {
-      cartData[itemId][size][color] = 1;
-    }
-    setCartItems(cartData);
+      let cartData = structuredClone(cartItems);
+      if (!cartData[itemId]) cartData[itemId] = {};
+      if (!cartData[itemId][size]) cartData[itemId][size] = {};
+      if (cartData[itemId][size][color]) {
+        cartData[itemId][size][color] += 1;
+      } else {
+        cartData[itemId][size][color] = 1;
+      }
+      setCartItems(cartData);
 
-    if (token) {
-      try {
+      if (token) {
         await axios.post(
           backendUrl + "/api/cart/add",
           { itemId, size, color },
           { headers: { token } }
         );
-      } catch (error) {
-        console.log(error);
-        toast.error(error.message);
       }
-    }
 
-    toast.success("Product Added to Cart");
+      return true;
+    },
+
+    onSuccess: () => {
+      toast.success("Product Added to Cart");
+    },
+  });
+
+  const addToCart = (itemId, size, color) => {
+    addToCartMutation.mutate({ itemId, size, color });
   };
 
   //=====================
@@ -187,6 +192,7 @@ const ShopContextProvider = ({ children }) => {
     cartItems,
     setCartItems,
     addToCart,
+    addToCartPending: addToCartMutation.isPending,
     getCartCount,
     updateQuantity,
     getCartAmount,
