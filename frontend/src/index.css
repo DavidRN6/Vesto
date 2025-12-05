@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: "outfit", serif;
+  font-family: "outfit", "Cairo", serif;
 }
 #logo {
   font-family: "Oleo Script", serif;

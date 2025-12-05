@@ -24,6 +24,8 @@ import { ShopContext } from "../context/ShopContext";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Title from "../Components/Title";
 import ProductItem from "../Components/ProductItem";
+import Lottie from "lottie-react";
+import loadingSpinner from "../animations/Spinner.json";
 
 function Collection() {
   const { products, productsLoading, productsError, search, showSearch } =
@@ -129,12 +131,27 @@ function Collection() {
     sortProduct();
   }, [sortType]);
 
+  //=====================
+  // Handling loading
+  //=====================
   if (productsLoading)
-    return <p className="text-center py-10">Loading products...</p>;
+    return (
+      <div className="text-center py-10">
+        <Lottie className="h-[75px]" animationData={loadingSpinner} />
+      </div>
+    );
+
+  //===================
+  // Handling errors
+  //===================
   if (productsError)
     return (
       <p className="text-center py-10 text-red-500">Error loading products.</p>
     );
+
+  //=======================
+  // Handling no products
+  //=======================
   if (!products || products.length === 0)
     return <p className="text-center py-10">No products found.</p>;
 
