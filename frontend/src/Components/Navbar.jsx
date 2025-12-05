@@ -189,7 +189,7 @@ function Navbar() {
           visible ? `w-full` : `w-0`
         }`}
       >
-        <div className="flex flex-col text-gray-600 mt-16">
+        <div className="flex flex-col mt-16">
           <NavLink
             onClick={() => setVisible(false)}
             className="py-2 pl-6 border"
